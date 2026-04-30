@@ -19,6 +19,10 @@ import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
 
+if (JavaVersion.current() != JavaVersion.VERSION_17) {
+    throw new GradleException("This project requires Java 17. Current version: " + JavaVersion.current())
+}
+
 android {
 
     compileSdk 34
@@ -102,8 +106,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
 
     packagingOptions {
