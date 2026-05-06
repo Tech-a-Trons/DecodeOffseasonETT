@@ -51,7 +51,7 @@ public class TeleOpProgram extends NextFTCOpMode {
 
     @Override
     public void onStartButtonPressed() {
-        PedroComponent.follower().setStartingPose(start == null ? new Pose() : start);
+        PedroComponent.follower().setStartingPose(new Pose(72,72,0));
         PedroComponent.follower().startTeleOpDrive();
         PedroComponent.follower().update();
 //        if (gamepad1.right_bumper) {

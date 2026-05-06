@@ -33,7 +33,14 @@ public class TurretPIDTele extends NextFTCOpMode {
     double xt = 121 - 72;
     @Override
     public void onUpdate() {
-        follower.update();
+        Pose cachedPose = null;
+
+        if (follower != null) {
+            follower.update();
+
+        }
+
+
         telemetry.update();
 
         follower.setTeleOpDrive(
@@ -43,7 +50,9 @@ public class TurretPIDTele extends NextFTCOpMode {
                 true // Robot Centric
         );
 
-        Pose cachedPose = PedroComponent.follower().getPose();
+
+            Pose cachedPose = PedroComponent.follower().getPose();
+        }
 
         double x = cachedPose.getY() - 72;
         double y = cachedPose.getX() - 72;
