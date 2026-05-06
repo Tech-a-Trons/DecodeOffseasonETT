@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Pranav;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import org.firstinspires.ftc.teamcode.Pranav.Subsystems.Hood;
 import org.firstinspires.ftc.teamcode.Pranav.Subsystems.Intake;
@@ -13,8 +14,10 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+import dev.nextftc.ftc.components.LoopTimeComponent;
 
 @TeleOp(name = "Pranav Tele")
 public class TeleOpProgram extends NextFTCOpMode {
@@ -22,8 +25,9 @@ public class TeleOpProgram extends NextFTCOpMode {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, Transfer.INSTANCE, ShooterPID.INSTANCE, Turret.INSTANCE, Hood.INSTANCE),
                 BulkReadComponent.INSTANCE,
-                BindingsComponent.INSTANCE
-        );
+                BindingsComponent.INSTANCE,
+                new PedroComponent(Constants::createFollower), new LoopTimeComponent()
+                );
     }
 
     Transfer transfer;
@@ -36,18 +40,20 @@ public class TeleOpProgram extends NextFTCOpMode {
 
     @Override
     public void onInit() {
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(start == null ? new Pose() : start);
-        follower.update();
-        transfer = new Transfer(hardwareMap);
-        intake = new Intake(hardwareMap);
+        transfer = new Transfer();
+        intake = new Intake();
         shooterPID = new ShooterPID("red");
         hood = new Hood("red");
         turret = new Turret("red");
+        intake.init(hardwareMap);
+        transfer.init(hardwareMap);
     }
 
     @Override
     public void onStartButtonPressed() {
+        PedroComponent.follower().setStartingPose(start == null ? new Pose() : start);
+        PedroComponent.follower().startTeleOpDrive();
+        PedroComponent.follower().update();
 //        if (gamepad1.right_bumper) {
 //            shooterPID.INSTANCE.close();
 //            if (gamepad1.dpad_up) {
@@ -90,9 +96,9 @@ public class TeleOpProgram extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
-        follower.update();
+        PedroComponent.follower().update();
 
-        follower.setTeleOpDrive(
+        PedroComponent.follower().setTeleOpDrive(
                 -gamepad1.left_stick_y,
                 -gamepad1.left_stick_x,
                 -gamepad1.right_stick_x,

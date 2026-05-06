@@ -1,6 +1,13 @@
 repositories {
     mavenCentral()
     maven { url = "https://mymaven.bylazar.com/releases" }
+    maven {
+        url = "https://repo.dairy.foundation/releases"
+    }
+    // Dairy snapshots repository
+    maven {
+        url = "https://repo.dairy.foundation/snapshots"
+    }
     google() // Needed for androidx
 }
 
@@ -18,5 +25,7 @@ dependencies {
     implementation 'com.pedropathing:ftc:2.1.1'
     implementation 'com.pedropathing:telemetry:1.0.0'
     implementation 'com.bylazar:fullpanels:1.0.12'
+    implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
+    implementation 'org.openftc:easyopencv:1.5.1'
 }
 

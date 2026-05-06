@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Pranav.Subsystems;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import java.util.Objects;
 
@@ -70,7 +71,7 @@ public class ShooterPID implements Subsystem {
 
     public Command shoot() {
 
-       follower.update();
+        PedroComponent.follower().update();
 
        Pose pose = PedroComponent.follower().getPose();
 

@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "FrontRedPranav", group = "Autonomous")
+@Autonomous(name = "FrontBluePranav", group = "Autonomous")
 @Configurable // Panels
 public class FrontBluePranav extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
