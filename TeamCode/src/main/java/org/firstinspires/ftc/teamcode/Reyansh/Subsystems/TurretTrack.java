@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Reyansh.Subsystems;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 import static java.lang.Math.atan2;
 
 import com.pedropathing.geometry.Pose;
@@ -18,35 +17,31 @@ public class TurretTrack implements Subsystem {
     public static final TurretTrack INSTANCE = new TurretTrack();
 
     private ControlSystem controller;
-    ServoGroup turret = new ServoGroup(
-            new ServoEx("turret1"),
-            new ServoEx("turret2")
-    );
+    private ServoGroup turret;
 
     Pose CachedPose = null;
 
     public static void init(HardwareMap hardwareMap) {
-        ServoGroup turret = new ServoGroup(
-                new ServoEx("turret1"),
-                new ServoEx("turret2")
+        INSTANCE.turret = new ServoGroup(
+                new ServoEx(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "turret1")),
+                new ServoEx(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "turret2"))
         );
-    }
-
-    public void configure() {
-        controller = ControlSystem.builder()
+        
+        INSTANCE.controller = ControlSystem.builder()
                 .posPid(0.001, 0.0, 0.0)
                 .basicFF(0.003, 0.08, 0.0)
                 .build();
 
-        controller.setGoal(new KineticState(0.0));
+        INSTANCE.controller.setGoal(new KineticState(0.0));
     }
 
     double yt = 121 - 72;
     double xt = 121 - 72;
 
 
-    public void TurretTrack() {
-        follower.update();
+    public void track() {
+        if (controller == null || turret == null) return;
+        PedroComponent.follower().update();
 
         Pose cachedPose = PedroComponent.follower().getPose();
 
@@ -84,7 +79,7 @@ public class TurretTrack implements Subsystem {
 //        }
     @Override
     public void periodic() {
-        TurretTrack();
+        track();
     }
 
 

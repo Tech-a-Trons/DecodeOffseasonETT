@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.Reyansh.Subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
-
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -15,11 +12,11 @@ import dev.nextftc.hardware.impl.ServoEx;
 public class Hood implements Subsystem {
     public static final Hood INSTANCE = new Hood();
     private ControlSystem controller;
-    ServoEx hood = hardwareMap.get(ServoEx.class, "hood");
+    private ServoEx hood;
 
     public void init(HardwareMap hardwareMap) {
         // initialization logic (runs on init)
-        ServoEx hood = hardwareMap.get(ServoEx.class, "hood");
+        hood = hardwareMap.get(ServoEx.class, "hood");
     }
     Pose CachedPose = null;
 
@@ -38,7 +35,7 @@ public class Hood implements Subsystem {
 
 
     public void HoodOn() {
-        follower.update();
+        PedroComponent.follower().update();
 //        telemetry.update();
 
 

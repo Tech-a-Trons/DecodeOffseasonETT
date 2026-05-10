@@ -59,6 +59,7 @@ public class Constants {
     );
 
     public static Follower createFollower(HardwareMap hardwareMap) {
+        if (hardwareMap == null) return null;
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
                 .pinpointLocalizer(localizerConstants)

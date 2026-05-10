@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.Reyansh.Subsystems;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
-
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import dev.nextftc.control.ControlSystem;
@@ -18,23 +17,16 @@ public class TurretPID implements Subsystem {
 
     private ControlSystem controller;
 
-    public static MotorGroup outtake = new MotorGroup(
-            new MotorEx("outtakeleft").reversed(),
-            new MotorEx("outtakeright")
-    );
+    private MotorGroup outtake;
 
     Pose CachedPose = null;
 
     public void init(HardwareMap hardwareMap) {
-        MotorGroup outtake = new MotorGroup(
-                new MotorEx("outtakeleft").reversed(),
-                new MotorEx("outtakeright")
+        outtake = new MotorGroup(
+                new MotorEx((DcMotorEx) hardwareMap.get("outtakeleft")).reversed(),
+                new MotorEx((DcMotorEx) hardwareMap.get("outtakeright"))
         );
 
-
-    }
-
-    public void Configure() {
         controller = ControlSystem.builder()
                 .velPid(0.001, 0.0, 0.0)
                 .basicFF(0.003, 0.08, 0.0)
@@ -48,7 +40,7 @@ public class TurretPID implements Subsystem {
 
 
     public void FlyWheelsOn() {
-        follower.update();
+        PedroComponent.follower().update();
 //        telemetry.update();
         Pose cachedPose = PedroComponent.follower().getPose();
 
@@ -80,6 +72,7 @@ public class TurretPID implements Subsystem {
 
 
     public void stop() {
+        if (controller == null || outtake == null) return;
         controller.setGoal(new KineticState(0.0, 0.0));
         outtake.setPower(controller.calculate(new KineticState(
                 outtake.getCurrentPosition(),

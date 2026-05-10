@@ -9,32 +9,31 @@ public class Intaker implements Subsystem {
     public static final Intaker INSTANCE = new Intaker();
     // put hardware, commands, etc here
 
-    MotorEx intake = new MotorEx("intake");
-
-    public void forward() {
-        intake.setPower(1);
-    }
-
-    public void backward() {
-        intake.setPower(-1);
-    }
-
-    public void slight() {
-        intake.setPower(0.35);
-    }
-
-    public void advance() {
-        intake.setPower(0.60);
-    }
-
-    public void stop() {
-        intake.setPower(0);
-    }
-
+    private MotorEx intake;
 
     public void init(HardwareMap hardwareMap) {
         // initialization logic (runs on init)
-        MotorEx intake = new MotorEx("intake");
+        intake = new MotorEx("intake");
+    }
+
+    public void forward() {
+        if (intake != null) intake.setPower(1);
+    }
+
+    public void backward() {
+        if (intake != null) intake.setPower(-1);
+    }
+
+    public void slight() {
+        if (intake != null) intake.setPower(0.35);
+    }
+
+    public void advance() {
+        if (intake != null) intake.setPower(0.60);
+    }
+
+    public void stop() {
+        if (intake != null) intake.setPower(0);
     }
 
     @Override

@@ -1,19 +1,24 @@
 package org.firstinspires.ftc.teamcode.Reyansh.TestTeles;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
-
+import com.qualcomm.robotcore.hardware.Servo;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.hardware.impl.ServoEx;
-@TeleOp
+@TeleOp(name = "HOod test")
 
 public class HoodTele extends NextFTCOpMode {
-    ServoEx hood = hardwareMap.get(ServoEx.class, "hood");
+    public HoodTele() {
+        addComponents(new PedroComponent(Constants::createFollower));
+    }
+
+    ServoEx hood;
     Pose CachedPose = null;
     double yt = 121 - 72;
     double xt = 121 - 72;
@@ -21,7 +26,11 @@ public class HoodTele extends NextFTCOpMode {
 
     @Override
     public void onInit() {
-
+        if (hardwareMap != null) {
+            hood = new ServoEx(hardwareMap.get(Servo.class, "hood"));
+        } else {
+            telemetry.addData("Error", "HardwareMap is null! Check configuration.");
+        }
 
         controller = ControlSystem.builder()
                 .posPid(0.001, 0.0, 0.0)
@@ -33,10 +42,10 @@ public class HoodTele extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
-        follower.update();
+        PedroComponent.follower().update();
         telemetry.update();
 
-        follower.setTeleOpDrive(
+        PedroComponent.follower().setTeleOpDrive(
                 -gamepad1.left_stick_y,
                 -gamepad1.left_stick_x,
                 -gamepad1.right_stick_x,

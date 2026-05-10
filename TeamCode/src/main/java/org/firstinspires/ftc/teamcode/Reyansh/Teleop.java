@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -53,15 +54,24 @@ public class Teleop extends NextFTCOpMode {
                 // Allows hardware calls to be done in one instant
                 BulkReadComponent.INSTANCE,
                 // The Next FTC binding system to attach commands to buttons
-                BindingsComponent.INSTANCE
+                BindingsComponent.INSTANCE,
+                new PedroComponent(Constants::createFollower)
         );
     }
 
     @Override
     public void onInit() {
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
-        follower.update();
+        if (hardwareMap == null) {
+            telemetry.addData("Error", "HardwareMap is null! Check configuration.");
+            return;
+        }
+        try {
+            follower = PedroComponent.follower();
+            follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+            follower.update();
+        } catch (Exception e) {
+            telemetry.addData("Error", "Follower init failed: " + e.getMessage());
+        }
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         Intaker.INSTANCE.init(hardwareMap);
         Transfer.INSTANCE.init(hardwareMap);
