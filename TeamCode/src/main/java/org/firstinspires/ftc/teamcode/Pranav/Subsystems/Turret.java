@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode.Pranav.Subsystems;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 import static java.lang.Math.atan2;
 
+import com.pedropathing.follower.Follower;
+
 import java.util.Objects;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
+import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.ServoGroup;
@@ -60,8 +63,9 @@ public class Turret implements Subsystem {
     double heading;
     double angle;
     double fin;
+    Follower follower;
 
-    public void goalface() {
+    public Command goalface() {
         follower.update();
 
         x = follower.getPose().getX();
@@ -79,5 +83,6 @@ public class Turret implements Subsystem {
         turret.setPosition(controller.calculate(new KineticState(
                 turret.getPosition()))
         );
+        return null;
     }
 }

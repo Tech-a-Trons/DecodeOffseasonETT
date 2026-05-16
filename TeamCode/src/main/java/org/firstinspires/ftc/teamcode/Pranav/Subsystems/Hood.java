@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
+import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.hardware.impl.ServoEx;
@@ -60,7 +61,7 @@ public class Hood implements Subsystem {
     double distance;
     double pos;
 
-    public void setHood() {
+    public Command setHood() {
         PedroComponent.follower().update();
 
         x = PedroComponent.follower().getPose().getX();
@@ -74,5 +75,6 @@ public class Hood implements Subsystem {
         hood.setPosition(controller.calculate(new KineticState(
                 hood.getPosition()))
         );
+        return null;
     }
 }

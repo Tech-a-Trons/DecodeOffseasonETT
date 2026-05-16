@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
 
@@ -19,9 +20,15 @@ public class Intake implements Subsystem {
         intake = hardwareMap.get(DcMotorEx.class, "in");
     }
 
-    public void into() { intake.setPower(0.6);}
-    public void out() { intake.setPower(-0.6);}
-    public void off() { intake.setPower(0.0);}
+    public Command into() { intake.setPower(0.6);
+        return null;
+    }
+    public Command out() { intake.setPower(-0.6);
+        return null;
+    }
+    public Command off() { intake.setPower(0.0);
+        return null;
+    }
 
     @Override
     public void periodic() {
