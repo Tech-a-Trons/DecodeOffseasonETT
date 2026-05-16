@@ -8,7 +8,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Reyansh.Subsystems.ColorSensor;
+//import org.firstinspires.ftc.teamcode.Reyansh.Subsystems.ColorSensor;
 import org.firstinspires.ftc.teamcode.Reyansh.Subsystems.Hood;
 import org.firstinspires.ftc.teamcode.Reyansh.Subsystems.Intaker;
 import org.firstinspires.ftc.teamcode.Reyansh.Subsystems.Transfer;
@@ -43,7 +43,7 @@ public class Teleop extends NextFTCOpMode {
         addComponents(
                 // This is where all of the subsystems are called
                 new SubsystemComponent(
-                        ColorSensor.INSTANCE,
+//                        ColorSensor.INSTANCE,
                         Intaker.INSTANCE,
                         Transfer.INSTANCE,
                         Hood.INSTANCE,
@@ -75,7 +75,7 @@ public class Teleop extends NextFTCOpMode {
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         Intaker.INSTANCE.init(hardwareMap);
         Transfer.INSTANCE.init(hardwareMap);
-        ColorSensor.INSTANCE.init(hardwareMap);
+//        ColorSensor.INSTANCE.init(hardwareMap);
         TurretPID.INSTANCE.init(hardwareMap);
         TurretTrack.init(hardwareMap);
         Hood.INSTANCE.init(hardwareMap);
@@ -153,7 +153,7 @@ public class Teleop extends NextFTCOpMode {
         if (intaketoggle) {
             Intaker.INSTANCE.forward();
             Transfer.INSTANCE.slight();
-            ColorSensor.INSTANCE.IncountBalls();
+//            ColorSensor.INSTANCE.IncountBalls();
         } else {
             Intaker.INSTANCE.stop();
             Transfer.INSTANCE.stop();
