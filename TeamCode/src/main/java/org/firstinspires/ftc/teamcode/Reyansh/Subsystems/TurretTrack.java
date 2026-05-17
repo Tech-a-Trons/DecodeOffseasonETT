@@ -23,8 +23,8 @@ public class TurretTrack implements Subsystem {
 
     public static void init(HardwareMap hardwareMap) {
         INSTANCE.turret = new ServoGroup(
-                new ServoEx(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "turret1")),
-                new ServoEx(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "turret2"))
+                new ServoEx(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "turretServo1")),
+                new ServoEx(hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, "turretServo2"))
         );
         
         INSTANCE.controller = ControlSystem.builder()

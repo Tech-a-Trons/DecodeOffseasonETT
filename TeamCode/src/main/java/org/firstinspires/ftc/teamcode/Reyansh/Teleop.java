@@ -46,7 +46,7 @@ public class Teleop extends NextFTCOpMode {
 //                        ColorSensor.INSTANCE,
                         Intaker.INSTANCE,
                         Transfer.INSTANCE,
-                        Hood.INSTANCE,
+//                        Hood.INSTANCE,
                         TurretPID.INSTANCE,
                         TurretTrack.INSTANCE
 
@@ -78,7 +78,7 @@ public class Teleop extends NextFTCOpMode {
 //        ColorSensor.INSTANCE.init(hardwareMap);
         TurretPID.INSTANCE.init(hardwareMap);
         TurretTrack.init(hardwareMap);
-        Hood.INSTANCE.init(hardwareMap);
+//        Hood.INSTANCE.init(hardwareMap);
 
     }
 
@@ -112,15 +112,17 @@ public class Teleop extends NextFTCOpMode {
                 .whenTrue(
                         () -> {
                             TurretPID.INSTANCE.FlyWheelsOn();
+                            Intaker.INSTANCE.forward();
+
 
                         });
         Gamepads.gamepad1().leftTrigger().greaterThan(0.2)
-                .whenBecomesTrue(
+                .whenTrue(
                         () -> {
                             Transfer.INSTANCE.forward();
                             Intaker.INSTANCE.forward();
-                            IsShooting = true;
-                            shoottime.reset();
+//                            IsShooting = true;
+//                            shoottime.reset();
                         });
 
 

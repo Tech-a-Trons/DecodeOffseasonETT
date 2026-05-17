@@ -13,7 +13,7 @@ public class Intaker implements Subsystem {
 
     public void init(HardwareMap hardwareMap) {
         // initialization logic (runs on init)
-        intake = new MotorEx("intake");
+        intake = new MotorEx("in");
     }
 
     public void forward() {

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Reyansh.Subsystems;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
@@ -10,13 +11,13 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.hardware.impl.ServoEx;
 
 public class Hood implements Subsystem {
-    public static final Hood INSTANCE = new Hood();
+//    public static final Hood INSTANCE = new Hood();
     private ControlSystem controller;
-    private ServoEx hood;
+    private Servo hood;
 
     public void init(HardwareMap hardwareMap) {
         // initialization logic (runs on init)
-        hood = hardwareMap.get(ServoEx.class, "hood");
+        hood = hardwareMap.get(Servo.class, "hood");
     }
     Pose CachedPose = null;
 
