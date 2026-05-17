@@ -14,7 +14,7 @@ import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.ServoGroup;
 
 public class Hood implements Subsystem {
-    public static final Hood INSTANCE = new Hood("null");
+    public static final Hood INSTANCE = new Hood();
 
     public ControlSystem controller;
 
@@ -32,7 +32,7 @@ public class Hood implements Subsystem {
     double goalx = 0;
     double goaly = 0;
 
-    public Hood (String Alliance) {
+    public void init (String Alliance) {
         hood = new ServoGroup(
                 new ServoEx("hood")
         );
@@ -61,7 +61,7 @@ public class Hood implements Subsystem {
     double distance;
     double pos;
 
-    public Command setHood() {
+    public void setHood() {
         PedroComponent.follower().update();
 
         x = PedroComponent.follower().getPose().getX();
@@ -75,6 +75,6 @@ public class Hood implements Subsystem {
         hood.setPosition(controller.calculate(new KineticState(
                 hood.getPosition()))
         );
-        return null;
+
     }
 }

@@ -65,7 +65,7 @@ public class Turret implements Subsystem {
     double fin;
     Follower follower;
 
-    public Command goalface() {
+    public void goalface() {
         follower.update();
 
         x = follower.getPose().getX();
@@ -83,6 +83,5 @@ public class Turret implements Subsystem {
         turret.setPosition(controller.calculate(new KineticState(
                 turret.getPosition()))
         );
-        return null;
     }
 }

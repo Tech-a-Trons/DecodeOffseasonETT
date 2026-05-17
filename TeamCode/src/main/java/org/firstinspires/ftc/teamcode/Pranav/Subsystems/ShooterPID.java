@@ -18,7 +18,7 @@ import dev.nextftc.hardware.impl.MotorEx;
 
 public class ShooterPID implements Subsystem {
 
-    public static final ShooterPID INSTANCE = new ShooterPID("null");
+    public static final ShooterPID INSTANCE = new ShooterPID();
     public ControlSystem controller;
 
     public static MotorGroup shoot = new MotorGroup(
@@ -28,23 +28,23 @@ public class ShooterPID implements Subsystem {
 
     public void cont() {
         controller = ControlSystem.builder()
-                .velPid(0.001, 0.0, 0.0)
-                .basicFF(0.003, 0, 0.0)
+                .velPid(0.01, 0.0, 0.0)
+                .basicFF(0.003, 0.08, 0.0)
                 .build();
     }
 
     double goalx = 0;
     double goaly = 0;
 
-    public ShooterPID(String Alliance) {
+    public void init(String Alliance) {
         MotorGroup shoot = new MotorGroup(
                 new MotorEx("outtakeright"),
                 new MotorEx("outtakeleft").reversed()
         );
 
         controller = ControlSystem.builder()
-                .velPid(0.001, 0.0, 0.0)
-                .basicFF(0.003, 0, 0.0)
+                .velPid(0.01, 0.0, 0.0)
+                .basicFF(0.003, 0.08, 0.0)
                 .build();
 
         controller.setGoal(new KineticState(0.0, 0.0));
@@ -67,24 +67,28 @@ public class ShooterPID implements Subsystem {
 //                flywheelMotor.getVelocity())));
 //    }
 
-    double velo;
+    public double velo;
 
-    public Command shoot() {
-
+    public void shoot() {
         PedroComponent.follower().update();
+        Pose pose = PedroComponent.follower().getPose();
+        double cx = pose.getX() - 72;
+        double cy = pose.getY() - 72;
+        double distance = Math.sqrt(Math.pow(goalx - cx, 2) + Math.pow(goaly - cy, 2));
 
-       Pose pose = PedroComponent.follower().getPose();
+        // Remove "double" here — assign to the FIELD, not a new local variable
+        if (distance >= 123) {
+        velo = (20 * distance) +500;
+        } else {
+            velo = (20 * distance) +250;
+        }
 
-       double cx = pose.getX();
-       double cy = pose.getY();
+        controller.setGoal(new KineticState(0.0, velo));
+        shoot.setPower(controller.calculate(new KineticState(
+                shoot.getCurrentPosition(),
+                shoot.getVelocity())));
+    }
 
-       double distance = Math.sqrt(Math.pow(goalx-cx,2)+Math.pow(goaly-cy,2));
-
-       if (distance >= 123) {
-           double velo = (8.605087243 * distance) + 150;
-       } else if (distance <= 123) {
-           double velo = (8.605087243 * distance) + 200;
-       }
 
 //       double cvelo = (8.605087243 * distance) + 150;
 //
@@ -96,8 +100,7 @@ public class ShooterPID implements Subsystem {
 ////        );
 //
 
-       return new RunToVelocity(controller,velo).requires(this);
-    }
+
 
 //    public Command far() {
 //
@@ -122,13 +125,16 @@ public class ShooterPID implements Subsystem {
 //        return new RunToVelocity(controller,fvelo).requires(this);
 //    }
 
-    public Command repel() {
-        return new RunToVelocity(controller,-1000).requires(this);
-    }
+public void repel() {
+    controller.setGoal(new KineticState(0.0, -1000));
+    shoot.setPower(controller.calculate(new KineticState(
+            shoot.getCurrentPosition(),
+            shoot.getVelocity())));
+}
 
-    public Command stop() {
-
-        return new RunToVelocity(controller,0).requires(this);
-
+    public void stop() {
+        velo = 0;
+        controller.setGoal(new KineticState(0.0, 0.0));
+        shoot.setPower(0);
     }
 }

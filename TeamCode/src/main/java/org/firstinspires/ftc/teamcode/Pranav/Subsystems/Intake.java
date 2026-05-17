@@ -12,7 +12,9 @@ import dev.nextftc.hardware.impl.MotorEx;
 public class Intake implements Subsystem {
     public static final Intake INSTANCE = new Intake();
     private DcMotorEx intake;
+
     public Intake() {
+
 
     }
 
@@ -20,18 +22,19 @@ public class Intake implements Subsystem {
         intake = hardwareMap.get(DcMotorEx.class, "in");
     }
 
-    public Command into() { intake.setPower(0.6);
-        return null;
+    public void into() {
+        if (intake != null){
+            intake.setPower(0.6);
+        }
+
     }
-    public Command out() { intake.setPower(-0.6);
-        return null;
+    public void out() { if (intake != null) intake.setPower(-0.6);
+
     }
-    public Command off() { intake.setPower(0.0);
-        return null;
+    public void off() { if (intake != null) intake.setPower(0.0);
     }
 
     @Override
     public void periodic() {
-
     }
 }

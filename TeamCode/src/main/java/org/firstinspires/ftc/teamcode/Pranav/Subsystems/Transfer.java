@@ -19,18 +19,10 @@ public class Transfer implements Subsystem {
         motor = hardwareMap.get(DcMotorEx.class, "transfer");
     }
 
-    public Command into() { motor.setPower(0.6);
-        return null;
-    }
-    public Command out() { motor.setPower(-0.6);
-        return null;
-    }
-    public Command off() { motor.setPower(0);
-        return null;
-    }
-    public Command little() { motor.setPower(0.3);
-        return null;
-    }
+    public void into()  { if (motor != null) motor.setPower(-0.6); }
+    public void out()   { if (motor != null) motor.setPower(0.6); }
+    public void off()   { if (motor != null) motor.setPower(0.0); }
+    public void little(){ if (motor != null) motor.setPower(-0.3); }
 
     @Override
     public void periodic() {
