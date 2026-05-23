@@ -7,13 +7,14 @@ import java.util.Objects;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
+import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.ServoGroup;
 
 public class Hood implements Subsystem {
-    public static final Hood INSTANCE = new Hood("null");
+    public static final Hood INSTANCE = new Hood();
 
     public ControlSystem controller;
 
@@ -31,7 +32,7 @@ public class Hood implements Subsystem {
     double goalx = 0;
     double goaly = 0;
 
-    public Hood (String Alliance) {
+    public void init (String Alliance) {
         hood = new ServoGroup(
                 new ServoEx("hood")
         );
@@ -74,5 +75,6 @@ public class Hood implements Subsystem {
         hood.setPosition(controller.calculate(new KineticState(
                 hood.getPosition()))
         );
+
     }
 }

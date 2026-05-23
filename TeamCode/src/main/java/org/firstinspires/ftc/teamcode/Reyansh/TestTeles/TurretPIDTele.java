@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.Reyansh.TestTeles;
 
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
+
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
@@ -13,25 +12,16 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.impl.MotorEx;
 
-@TeleOp(name = "Turret test 2")
+@TeleOp(name = "Ranch")
 public class TurretPIDTele extends NextFTCOpMode {
-    public TurretPIDTele() {
-        addComponents(new PedroComponent(Constants::createFollower));
-    }
-
     private ControlSystem controller;
-    public MotorGroup outtake;
+    public static MotorGroup outtake = new MotorGroup(
+            new MotorEx("outtakeleft"),
+            new MotorEx("outtakeright").reversed()
+    );
     Pose CachedPose = null;
     @Override
     public void onInit() {
-        if (hardwareMap != null) {
-            outtake = new MotorGroup(
-                    new MotorEx((DcMotorEx) hardwareMap.get("outtakeleft")),
-                    new MotorEx((DcMotorEx) hardwareMap.get("outtakeright")).reversed()
-            );
-        } else {
-            telemetry.addData("Error", "HardwareMap is null! Check configuration.");
-        }
         controller = ControlSystem.builder()
                 .velPid(0.001, 0.0, 0.0)
                 .basicFF(0.003, 0.08, 0.0)
@@ -43,7 +33,16 @@ public class TurretPIDTele extends NextFTCOpMode {
     double xt = 121 - 72;
     @Override
     public void onUpdate() {
-        PedroComponent.follower().setTeleOpDrive(
+
+        if (follower != null) {
+            follower.update();
+
+        }
+
+
+        telemetry.update();
+
+        follower.setTeleOpDrive(
                 -gamepad1.left_stick_y,
                 -gamepad1.left_stick_x,
                 -gamepad1.right_stick_x,
@@ -51,7 +50,8 @@ public class TurretPIDTele extends NextFTCOpMode {
         );
 
 
-            Pose cachedPose = PedroComponent.follower().getPose();
+        Pose cachedPose = PedroComponent.follower().getPose();
+
 
         double x = cachedPose.getY() - 72;
         double y = cachedPose.getX() - 72;

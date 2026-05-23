@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
 
@@ -18,10 +19,10 @@ public class Transfer implements Subsystem {
         motor = hardwareMap.get(DcMotorEx.class, "transfer");
     }
 
-    public void into() { motor.setPower(0.6);}
-    public void out() { motor.setPower(-0.6);}
-    public void off() { motor.setPower(0);}
-    public void little() { motor.setPower(0.3);}
+    public void into()  { if (motor != null) motor.setPower(-0.6); }
+    public void out()   { if (motor != null) motor.setPower(0.6); }
+    public void off()   { if (motor != null) motor.setPower(0.0); }
+    public void little(){ if (motor != null) motor.setPower(-0.3); }
 
     @Override
     public void periodic() {
