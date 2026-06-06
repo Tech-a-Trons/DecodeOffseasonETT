@@ -28,8 +28,8 @@ public class TurretPID implements Subsystem {
         );
 
         controller = ControlSystem.builder()
-                .velPid(0.001, 0.0, 0.0)
-                .basicFF(0.003, 0.08, 0.0)
+                .velPid(0.0016, 0.0, 0.004)
+                .basicFF(0.0001, 0.0, 0.0)
                 .build();
 
         controller.setGoal(new KineticState(0.0, 0.0));
@@ -37,46 +37,39 @@ public class TurretPID implements Subsystem {
 
     double yt = 121 - 72;
     double xt = 121 - 72;
+    double x = 0;
+    double y = 0;
+
+
 
 
     public void FlyWheelsOn() {
         PedroComponent.follower().update();
-//        telemetry.update();
         Pose cachedPose = PedroComponent.follower().getPose();
 
         double x = cachedPose.getY() - 72;
         double y = cachedPose.getX() - 72;
-        double distance = Math.sqrt(Math.pow(yt-y, 2)  + Math.pow(xt-x, 2));
-        double Velocity = (distance * 0.1) + 200;
+        double distance = Math.sqrt(Math.pow(yt - y, 2) + Math.pow(xt - x, 2));
+        double Velocity = (distance * 6);
         controller.setGoal(new KineticState(0.0, Velocity));
-        outtake.setPower(controller.calculate(new KineticState(
-                outtake.getCurrentPosition(),
-                outtake.getVelocity()))
-        );
-//        telemetry.addData(String.valueOf(Velocity), "Velocity");
-//        telemetry.addData(String.valueOf(x), "x");
-//        telemetry.addData(String.valueOf(y), "y");
-//        telemetry.addData(String.valueOf(distance), "distance");
-//        telemetry.addData(String.valueOf(outtake.getVelocity()), "distance");
-
-
-//        if (gamepad1.aWasPressed()) {
-//            controller.setGoal(new KineticState(0.0, 2000.0));
-//        } else if (gamepad1.bWasPressed()) {
-//            controller.setGoal(new KineticState(0.0, 0.0));
-//        } else if (gamepad1.xWasPressed()) {
-//            controller.setGoal(new KineticState(0.0, 1000.0));
-//        }
-
     }
 
 
     public void stop() {
-        if (controller == null || outtake == null) return;
+        if (controller == null) return;
         controller.setGoal(new KineticState(0.0, 0.0));
+    }
+
+    @Override
+    public void periodic() {
+        if (controller == null || outtake == null) return;
         outtake.setPower(controller.calculate(new KineticState(
                 outtake.getCurrentPosition(),
                 outtake.getVelocity()))
         );
     }
+//
+//    public double  getX()                 { return x; }
+//    public double  getY()                 { return y; }
+//    public double  getHeading()           { return heading; }
 }

@@ -88,7 +88,10 @@ public class Teleop extends NextFTCOpMode {
 
     @Override
     public void onStartButtonPressed() {
+
         follower.startTeleopDrive();
+
+        TurretTrack.INSTANCE.track();
 
         Gamepads.gamepad1().rightBumper()
                 .whenBecomesTrue(() -> {
@@ -112,7 +115,9 @@ public class Teleop extends NextFTCOpMode {
                 .whenTrue(
                         () -> {
                             TurretPID.INSTANCE.FlyWheelsOn();
-                            Intaker.INSTANCE.forward();
+//                            Intaker.INSTANCE.forward();
+//                            Transfer.INSTANCE.backward();
+
 
 
                         });
@@ -150,11 +155,19 @@ public class Teleop extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
+        Pose cachedPose = PedroComponent.follower().getPose();
+
+        double x = cachedPose.getY() - 72;
+        double y = cachedPose.getX() - 72;
+        double heading = cachedPose.getHeading();
+        telemetry.addData("x", (x));
+        telemetry.addData("x", (y));
+        telemetry.addData("x", (heading));
         follower.update();
         telemetryM.update();
         if (intaketoggle) {
             Intaker.INSTANCE.forward();
-            Transfer.INSTANCE.slight();
+//            Transfer.INSTANCE.slight();
 //            ColorSensor.INSTANCE.IncountBalls();
         } else {
             Intaker.INSTANCE.stop();

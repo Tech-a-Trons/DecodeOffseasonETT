@@ -57,7 +57,7 @@ public class TurretPIDTele extends NextFTCOpMode {
         double y = cachedPose.getX() - 72;
 
         double distance = Math.sqrt(Math.pow(yt-y, 2)  + Math.pow(xt-x, 2));
-        double Velocity = (distance * 200) + 200;
+        double Velocity = (distance * 0.1) + 200;
         telemetry.addData(String.valueOf(Velocity), "Velocity");
         telemetry.addData(String.valueOf(x), "x");
         telemetry.addData(String.valueOf(y), "y");
