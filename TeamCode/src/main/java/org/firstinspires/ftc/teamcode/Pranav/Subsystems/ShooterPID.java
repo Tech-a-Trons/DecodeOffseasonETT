@@ -26,12 +26,12 @@ public class ShooterPID implements Subsystem {
             new MotorEx("outtakeleft").reversed()
     );
 
-    public void cont() {
-        controller = ControlSystem.builder()
-                .velPid(0.01, 0.0, 0.0)
-                .basicFF(0.003, 0.08, 0.0)
-                .build();
-    }
+//    public void cont() {
+//        controller = ControlSystem.builder()
+//                .velPid(0.00025, 0.0, 0.0)
+//                .basicFF(0.0001, 0, 0.0)
+//                .build();
+//    }
 
     double goalx = 0;
     double goaly = 0;
@@ -43,8 +43,8 @@ public class ShooterPID implements Subsystem {
         );
 
         controller = ControlSystem.builder()
-                .velPid(0.01, 0.0, 0.0)
-                .basicFF(0.003, 0.08, 0.0)
+                .velPid(0.0055, 0.0, 0.5)
+                .basicFF(0.0001, 0.0, 0.0)
                 .build();
 
         controller.setGoal(new KineticState(0.0, 0.0));
@@ -78,9 +78,9 @@ public class ShooterPID implements Subsystem {
 
         // Remove "double" here — assign to the FIELD, not a new local variable
         if (distance >= 123) {
-        velo = (20 * distance) +500;
+        velo = (4.5 * distance);
         } else {
-            velo = (20 * distance) +250;
+            velo = (4.5 * distance)-3000;
         }
 
         controller.setGoal(new KineticState(0.0, velo));
