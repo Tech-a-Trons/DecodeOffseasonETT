@@ -50,7 +50,7 @@ public class TurretPID implements Subsystem {
         double x = cachedPose.getY() - 72;
         double y = cachedPose.getX() - 72;
         double distance = Math.sqrt(Math.pow(yt - y, 2) + Math.pow(xt - x, 2));
-        double Velocity = (distance * 6);
+        double Velocity = (distance * 8);
         controller.setGoal(new KineticState(0.0, Velocity));
     }
 

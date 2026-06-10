@@ -77,10 +77,10 @@ public class ShooterPID implements Subsystem {
         double distance = Math.sqrt(Math.pow(goalx - cx, 2) + Math.pow(goaly - cy, 2));
 
         // Remove "double" here — assign to the FIELD, not a new local variable
-        if (distance >= 123) {
-        velo = (4.5 * distance);
+        if (distance <= 123) {
+        velo = (0.5 * distance);
         } else {
-            velo = (4.5 * distance)-3000;
+            velo = (2.25 * distance)-3000;
         }
 
         controller.setGoal(new KineticState(0.0, velo));
@@ -126,7 +126,7 @@ public class ShooterPID implements Subsystem {
 //    }
 
 public void repel() {
-    controller.setGoal(new KineticState(0.0, -1000));
+    controller.setGoal(new KineticState(0.0, -250));
     shoot.setPower(controller.calculate(new KineticState(
             shoot.getCurrentPosition(),
             shoot.getVelocity())));

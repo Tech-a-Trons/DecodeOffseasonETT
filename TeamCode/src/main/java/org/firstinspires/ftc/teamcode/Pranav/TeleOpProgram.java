@@ -172,9 +172,9 @@ public class TeleOpProgram extends NextFTCOpMode {
         if (gamepad1.right_bumper) {
             Intake.INSTANCE.into();
             Transfer.INSTANCE.little();
-            if (gamepad1.right_trigger > 0.01) {
-                Transfer.INSTANCE.off();
-            }
+//            if (gamepad1.right_trigger > 0.01) {
+//                Transfer.INSTANCE.off();
+//            }
         }
 
         follower.setTeleOpDrive(
