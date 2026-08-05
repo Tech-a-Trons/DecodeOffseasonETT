@@ -183,6 +183,7 @@ public class NewAuto extends NextFTCOpMode {
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
+                    TurretPID.INSTANCE.setShooterSpeed(1000);
                     /* Grab Sample */
                     CompliantIntake.INSTANCE.off();
                     Transfer.INSTANCE.off();
@@ -195,9 +196,10 @@ public class NewAuto extends NextFTCOpMode {
             case 3:
                 if(!follower.isBusy()) {
                     /* Grab Sample */
+
+
                     CompliantIntake.INSTANCE.on();
                     Transfer.INSTANCE.on();
-                    TurretPID.INSTANCE.setShooterSpeed(1000);
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     setPathState(4);
@@ -229,6 +231,7 @@ public class NewAuto extends NextFTCOpMode {
             case 6:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
+                    TurretPID.INSTANCE.setShooterSpeed(1000);
                     /* Score Sample */
                     CompliantIntake.INSTANCE.off();
                     Transfer.INSTANCE.off();
@@ -243,7 +246,7 @@ public class NewAuto extends NextFTCOpMode {
                     /* Grab Sample */
                     CompliantIntake.INSTANCE.on();
                     Transfer.INSTANCE.on();
-                    TurretPID.INSTANCE.setShooterSpeed(1000);
+
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     setPathState(8);
@@ -274,6 +277,8 @@ public class NewAuto extends NextFTCOpMode {
             case 10:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
+                    TurretPID.INSTANCE.setShooterSpeed(1000);
+
                     /* Score Sample */
                     CompliantIntake.INSTANCE.off();
                     Transfer.INSTANCE.off();
@@ -288,7 +293,6 @@ public class NewAuto extends NextFTCOpMode {
                     /* Grab Sample */
                     CompliantIntake.INSTANCE.on();
                     Transfer.INSTANCE.on();
-                    TurretPID.INSTANCE.setShooterSpeed(1000);
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
                     setPathState(12);
@@ -320,6 +324,8 @@ public class NewAuto extends NextFTCOpMode {
             case 14:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
+                    TurretPID.INSTANCE.setShooterSpeed(1000);
+
                     /* Score Sample */
                     CompliantIntake.INSTANCE.off();
                     Transfer.INSTANCE.off();
@@ -378,7 +384,7 @@ public class NewAuto extends NextFTCOpMode {
         follower.update();
         AutoPaths();
 
-            // Feedback to Driver Hub for debugging
+        // Feedback to Driver Hub for debugging
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
