@@ -22,6 +22,8 @@ public class Transfer implements Subsystem {
         transfer.setPower(1);
     }
 
+    public void off() {transfer.setPower(0);}
+
     public void nice() {
         transfer.setPower(-0.2);
     }
