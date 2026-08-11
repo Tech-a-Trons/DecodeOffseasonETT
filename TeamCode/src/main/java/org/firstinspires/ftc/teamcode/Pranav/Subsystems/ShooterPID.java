@@ -26,12 +26,12 @@ public class ShooterPID implements Subsystem {
             new MotorEx("outtakeleft").reversed()
     );
 
-    public void cont() {
-        controller = ControlSystem.builder()
-                .velPid(0.01, 0.0, 0.0)
-                .basicFF(0.003, 0.08, 0.0)
-                .build();
-    }
+//    public void cont() {
+//        controller = ControlSystem.builder()
+//                .velPid(0.00025, 0.0, 0.0)
+//                .basicFF(0.0001, 0, 0.0)
+//                .build();
+//    }
 
     double goalx = 0;
     double goaly = 0;
@@ -43,8 +43,8 @@ public class ShooterPID implements Subsystem {
         );
 
         controller = ControlSystem.builder()
-                .velPid(0.01, 0.0, 0.0)
-                .basicFF(0.003, 0.08, 0.0)
+                .velPid(0.0055, 0.0, 0.5)
+                .basicFF(0.0001, 0.0, 0.0)
                 .build();
 
         controller.setGoal(new KineticState(0.0, 0.0));
@@ -77,10 +77,10 @@ public class ShooterPID implements Subsystem {
         double distance = Math.sqrt(Math.pow(goalx - cx, 2) + Math.pow(goaly - cy, 2));
 
         // Remove "double" here — assign to the FIELD, not a new local variable
-        if (distance >= 123) {
-        velo = (20 * distance) +500;
+        if (distance <= 123) {
+        velo = (0.5 * distance);
         } else {
-            velo = (20 * distance) +250;
+            velo = (2.25 * distance)-3000;
         }
 
         controller.setGoal(new KineticState(0.0, velo));
@@ -126,7 +126,7 @@ public class ShooterPID implements Subsystem {
 //    }
 
 public void repel() {
-    controller.setGoal(new KineticState(0.0, -1000));
+    controller.setGoal(new KineticState(0.0, -250));
     shoot.setPower(controller.calculate(new KineticState(
             shoot.getCurrentPosition(),
             shoot.getVelocity())));

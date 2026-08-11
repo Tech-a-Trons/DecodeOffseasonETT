@@ -22,7 +22,7 @@ public class Transfer implements Subsystem {
     public void into()  { if (motor != null) motor.setPower(-0.6); }
     public void out()   { if (motor != null) motor.setPower(0.6); }
     public void off()   { if (motor != null) motor.setPower(0.0); }
-    public void little(){ if (motor != null) motor.setPower(-0.3); }
+    public void little(){ if (motor != null) motor.setPower(-0.1); }
 
     @Override
     public void periodic() {

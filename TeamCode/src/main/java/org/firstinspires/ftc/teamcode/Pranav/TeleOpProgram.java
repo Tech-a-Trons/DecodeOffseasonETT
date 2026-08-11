@@ -149,7 +149,7 @@ public class TeleOpProgram extends NextFTCOpMode {
 
                         //);
 
-        Gamepads.gamepad1().leftTrigger().greaterThan(0.0)
+        Gamepads.gamepad1().dpadLeft()
                 .whenBecomesTrue(() -> {
                     ShooterPID.INSTANCE.stop();
                     Intake.INSTANCE.off();
@@ -171,11 +171,10 @@ public class TeleOpProgram extends NextFTCOpMode {
     public void onUpdate() {
         if (gamepad1.right_bumper) {
             Intake.INSTANCE.into();
-            if (gamepad1.right_trigger > 0.01) {
-                Transfer.INSTANCE.off();
-            } else {
-                Transfer.INSTANCE.little();
-            }
+            Transfer.INSTANCE.little();
+//            if (gamepad1.right_trigger > 0.01) {
+//                Transfer.INSTANCE.off();
+//            }
         }
 
         follower.setTeleOpDrive(
