@@ -21,7 +21,7 @@ public class Transfer implements Subsystem {
     }
 
     public void backward() {
-        if (transfer != null) transfer.setPower(0.1);
+        if (transfer != null) transfer.setPower(1);
     }
 
     public void slight() {

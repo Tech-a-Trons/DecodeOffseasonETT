@@ -31,6 +31,8 @@ public class Teleop extends NextFTCOpMode {
     ElapsedTime shoottime = new ElapsedTime();
 
     boolean intaketoggle = false;
+
+    boolean block = false;
     private Follower follower;
     public static Pose startingPose; //See ExampleAuto to understand how to use this
     private boolean automatedDrive;
@@ -106,6 +108,7 @@ public class Teleop extends NextFTCOpMode {
                 .whenBecomesTrue(() -> {
                             Intaker.INSTANCE.stop();
                             intaketoggle = false;
+                            block = false;
                             Transfer.INSTANCE.stop();
                             TurretPID.INSTANCE.stop();
 
@@ -136,6 +139,11 @@ public class Teleop extends NextFTCOpMode {
                     follower.setPose(new Pose(72, 72, Math.toRadians(270.0)));
                 });
 
+        Gamepads.gamepad1().a()
+                .whenBecomesTrue(() -> {
+                    block = true;
+                });
+
 
         // Kill Switches
         Gamepads.gamepad2().rightTrigger().greaterThan(0.2)
@@ -161,14 +169,17 @@ public class Teleop extends NextFTCOpMode {
         double y = cachedPose.getX() - 72;
         double heading = cachedPose.getHeading();
         telemetry.addData("x", (x));
-        telemetry.addData("x", (y));
-        telemetry.addData("x", (heading));
+        telemetry.addData("y", (y));
+        telemetry.addData("heading", (heading));
         follower.update();
         telemetryM.update();
-        if (intaketoggle) {
+        if (intaketoggle == true && block == false) {
             Intaker.INSTANCE.forward();
 //            Transfer.INSTANCE.slight();
 //            ColorSensor.INSTANCE.IncountBalls();
+        } else if(block == true && intaketoggle == false) {
+            Intaker.INSTANCE.backward();
+            Transfer.INSTANCE.backward();
         } else {
             Intaker.INSTANCE.stop();
             Transfer.INSTANCE.stop();
