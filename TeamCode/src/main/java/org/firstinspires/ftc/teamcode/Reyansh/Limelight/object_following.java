@@ -133,6 +133,9 @@ public class object_following extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
+        double y = -gamepad1.left_stick_y;
+        double x = gamepad1.left_stick_x * 1.1;
+        double rx = gamepad1.right_stick_x;
         // --- Read from extractor ---
         valid = ballDistance.isTargetVisible();
         Double txReading = ballDistance.getTx();
