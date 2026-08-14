@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.controllable.MotorGroup;
@@ -78,6 +79,7 @@ public class object_following extends NextFTCOpMode {
         try {
             ballDistance = new LimelightDistance(hardwareMap, "limelight3A");
             ballDistance.setTelemetry(telemetry);
+            Intaker.INSTANCE.init(hardwareMap);
 
             // Split left/right so turning is differential (opposite-signed power on
             // each side actually rotates the robot) instead of a single MotorGroup
@@ -91,8 +93,8 @@ public class object_following extends NextFTCOpMode {
                     new MotorEx((DcMotorEx) hardwareMap.get("bl"))
             );
             rightDrive = new MotorGroup(
-                    new MotorEx((DcMotorEx) hardwareMap.get("fr")).reversed(),
-                    new MotorEx((DcMotorEx) hardwareMap.get("br")).reversed()
+                    new MotorEx((DcMotorEx) hardwareMap.get("fr")),
+                    new MotorEx((DcMotorEx) hardwareMap.get("br"))
             );
         } catch (Exception e) {
             // Most common real-world cause of "robot crashes on init": a hardware
@@ -113,6 +115,22 @@ public class object_following extends NextFTCOpMode {
         if (initFailed || ballDistance == null) return;
         ballDistance.startReading();
         readingStarted = true;
+        Gamepads.gamepad1().a()
+                .whenBecomesTrue(() -> {
+                            tracking = true;
+
+                        }
+
+
+                );
+        Gamepads.gamepad1().b()
+                .whenBecomesTrue(() -> {
+                            tracking = false;
+
+                        }
+
+
+                );
     }
 
     @Override
@@ -167,13 +185,6 @@ public class object_following extends NextFTCOpMode {
         }
         distanceInches = ballDistance.getDistance();
 
-        if (gamepad1.a) {
-            tracking = true;
-        }
-        if (gamepad1.b) {
-            tracking = false;
-        }
-
         boolean withinTightDeadband = Math.abs(tx) < TX_DEADBAND;
 
         double leftPower;
@@ -194,6 +205,13 @@ public class object_following extends NextFTCOpMode {
             // drops lock -- this is now the ONLY way lock is lost besides tracking
             // being turned off; drifting out of alignment while locked no longer
             // matters.
+            //
+            // FIXED: rightPower was previously set equal to turnPower (same sign
+            // as leftPower). With both wheels spinning the same direction the
+            // robot drove straight forward/backward instead of turning to search
+            // -- backward whenever turnPower was negative (lastKnownTx < 0), which
+            // is the unwanted "moving backward" behavior. Opposite signs are what
+            // actually turn the robot in place.
             double turnPower = (lastKnownTx < 0) ? -SEARCH_POWER : SEARCH_POWER;
             turnPower = Math.max(-MAX_POWER, Math.min(MAX_POWER, turnPower));
             leftPower = turnPower;
@@ -224,6 +242,12 @@ public class object_following extends NextFTCOpMode {
             // correction -- once locked, tx is ignored entirely for driving
             // purposes. Only losing tracking or losing the target (!valid) resets
             // hasLockedOn; drifting out of tx alignment no longer matters.
+            //
+            // FIXED: rightPower was previously set to -drivePower (opposite sign
+            // from leftPower). With one wheel forward and the other backward the
+            // robot just spun in place instead of driving straight ahead, so it
+            // never actually reached the ball. Both sides need the same sign to
+            // drive straight.
             hasLockedOn = true;
             double drivePower = (distanceInches != null)
                     ? kP_drive * distanceInches

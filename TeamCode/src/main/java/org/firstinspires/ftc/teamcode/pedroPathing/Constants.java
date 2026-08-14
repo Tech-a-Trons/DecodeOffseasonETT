@@ -2,10 +2,13 @@ package org.firstinspires.ftc.teamcode.pedroPathing;
 
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PredictiveBrakingCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.pedropathing.ftc.localization.Encoder;
+import com.pedropathing.ftc.localization.constants.DriveEncoderConstants;
 import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -17,18 +20,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
 
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(14.06)
-//            .forwardZeroPowerAcceleration(-47)
-//            .lateralZeroPowerAcceleration(-83)
-            .useSecondaryTranslationalPIDF(false)
-            .useSecondaryHeadingPIDF(false)
-            .useSecondaryDrivePIDF(false)
-            .centripetalScaling(0.0005)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.2, 0, 0.01, 0))
-            .headingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.03, 0))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.012, 0, 0, 0.6 ,0));
+            .mass(1.0)
+            .useSecondaryTranslationalPIDF(true)
+            .useSecondaryHeadingPIDF(true)
+            .useSecondaryDrivePIDF(true)
+            .headingPIDFCoefficients(new PIDFCoefficients(1.5, 0, 0.1, 0)) // tuned constants
+            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.1,0,0.01,0))
+            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(0.1, 0.04, 0.0016)) // (kP, kLinear, kQuadratic)
+            .centripetalScaling(0)
+            .forwardZeroPowerAcceleration(0)
+            .lateralZeroPowerAcceleration(0)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, 0))
+            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1,0,0.01,0))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0.0,0.01,0.6,0.0))
+            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01));
+
 
     public static MecanumConstants driveConstants = new MecanumConstants()
+            .maxPower(1)
             .leftFrontMotorName("fl").useBrakeModeInTeleOp(true)
             .leftRearMotorName("bl")
             .rightFrontMotorName("fr")
@@ -37,12 +46,13 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(80)
-            .yVelocity(63);
+            .xVelocity(0)
+            .yVelocity(0);
+
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-3.5)
-            .strafePodX(-6)
+            .forwardPodY(0)
+            .strafePodX(0)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .encoderResolution(
@@ -52,18 +62,17 @@ public class Constants {
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
     public static PathConstraints pathConstraints = new PathConstraints(
-            0.67, //0.995
+            0.5,
             500,
             1,
             1
     );
 
     public static Follower createFollower(HardwareMap hardwareMap) {
-        if (hardwareMap == null) return null;
         return new FollowerBuilder(followerConstants, hardwareMap)
-                .mecanumDrivetrain(driveConstants)
-                .pinpointLocalizer(localizerConstants)
                 .pathConstraints(pathConstraints)
+                .mecanumDrivetrain(driveConstants)
                 .build();
     }
+
 }

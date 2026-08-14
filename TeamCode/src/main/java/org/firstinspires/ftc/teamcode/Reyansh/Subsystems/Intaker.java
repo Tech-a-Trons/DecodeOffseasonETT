@@ -13,23 +13,23 @@ public class Intaker implements Subsystem {
 
     public void init(HardwareMap hardwareMap) {
         // initialization logic (runs on init)
-        intake = new MotorEx("in");
+        intake = new MotorEx("intake");
     }
 
     public void forward() {
-        if (intake != null) intake.setPower(1);
-    }
-
-    public void backward() {
         if (intake != null) intake.setPower(-1);
     }
 
+    public void backward() {
+        if (intake != null) intake.setPower(1);
+    }
+
     public void slight() {
-        if (intake != null) intake.setPower(0.35);
+        if (intake != null) intake.setPower(-0.35);
     }
 
     public void advance() {
-        if (intake != null) intake.setPower(0.60);
+        if (intake != null) intake.setPower(-0.60);
     }
 
     public void stop() {
